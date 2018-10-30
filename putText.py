@@ -2,23 +2,30 @@
 print("Content-type: text/html\n\n")
 import cgi
 import json
-import MBlib
+from MBlib import blobUser
+from MBlib import jsonClass
 
 arguments = cgi.FieldStorage()
 
-userId = MBlib.getUserId(arguments["usrId"])
+blobUser.setHomeFolder()
+
+user = blobUser(arguments["idTkn"])
+text = arguments["text"]
+
+if user.isOk == False:
+    print("error")
+    exit
+user.write(text)
 
 
-path = 'files.json'
-data = MBlib.openJson(path)
+"""path = 'files.json'
+data = jsonClass.open(path)
 HomeFolder = data["HomeFolder"]
 
 path = HomeFolder + "/user/" + userId + ".json"
-userFile = MBlib.openJson(path)
+userFile = jsonClass.open(path)
 #New Post in userFile
-MBlib.saveJson(path, userFile)
+jsonClass.save(path, userFile)
 
 path = data["HomeFolder"] + "/index.json"
-index = MBlib.openJson(path)
-
-arguments = cgi.FieldStorage()
+index = jsonClass.open(path)"""
