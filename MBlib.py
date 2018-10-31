@@ -30,9 +30,7 @@ class blobUser:
             self.isOk = False
             return
         self.isOk = True
-        
-        # Path wird definiert
-        
+                
         # Werte vom json-file werden an blobUser übertragen
         userFile = jsonClass.open(self.path)
         self.firstName = userFile["info"]["firstName"]
