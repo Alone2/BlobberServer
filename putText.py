@@ -9,13 +9,15 @@ arguments = cgi.FieldStorage()
 
 blobUser.setHomeFolder()
 
-user = blobUser(arguments["idTkn"])
-text = arguments["text"]
+user = blobUser(arguments["idTkn"].value)
+text = arguments["text"].value
 
-if user.isOk == False:
-    print("error")
-    exit
-user.write(text)
+if user.isOk == True:
+    user.write(text)
+    print("done")
+else:
+    print("Error- Nicht angemeldet")
+
 
 
 """path = 'files.json'

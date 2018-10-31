@@ -32,7 +32,6 @@ class blobUser:
         self.isOk = True
         
         # Path wird definiert
-        self.path = self.homeFolder + "/user/" + self.userId + ".json"
         
         # Werte vom json-file werden an blobUser übertragen
         userFile = jsonClass.open(self.path)
@@ -48,15 +47,20 @@ class blobUser:
             
             # Path wird definiert
             self.path = self.homeFolder + "/user/" + self.userId + ".json"
-        except:
-            return False
         
+        except ValueError:
+            return False
+        #Debug:
+        #except ValueError as e: print(e)
+            
+
         # Wenn der User noch nicht im System ist, wird ihm ein File erstellt
         # -> Wenn der User sich manuell anmelden sollte -> Später durch Instanz ersetzen
         if not os.path.isfile(self.path):
             jsonData = {}
             storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"]}
             jsonData['info'] = storedInfo
+            jsonData['text'] = []
             jsonClass.save(self.path, jsonData)
 
         return True
@@ -68,7 +72,7 @@ class blobUser:
 
         #Text wird geschpeichert
         userFile = jsonClass.open(self.path)
-        userFile["text"] = {"time":zeitVar,"text":text}
+        userFile["text"].append({"time":zeitVar,"text":text})
         jsonClass.save(self.path, userFile)
 
     @classmethod
