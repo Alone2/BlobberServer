@@ -3,11 +3,9 @@ print("Content-type: text/html\n\n")
 import cgi
 import json
 from MBlib import blobUser
-from MBlib import jsonClass
+from MBlib import dataClass
 
 arguments = cgi.FieldStorage()
-
-blobUser.setHomeFolder()
 
 user = blobUser(arguments["idTkn"].value)
 text = arguments["text"].value
@@ -21,13 +19,13 @@ else:
 
 
 """path = 'files.json'
-data = jsonClass.open(path)
+data = dataClass.open(path)
 HomeFolder = data["HomeFolder"]
 
 path = HomeFolder + "/user/" + userId + ".json"
-userFile = jsonClass.open(path)
+userFile = dataClass.open(path)
 #New Post in userFile
-jsonClass.save(path, userFile)
+dataClass.save(path, userFile)
 
 path = data["HomeFolder"] + "/index.json"
-index = jsonClass.open(path)"""
+index = dataClass.open(path)"""
