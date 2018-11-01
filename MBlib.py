@@ -85,3 +85,39 @@ class blobUser:
         # es sie schon gibt -> index)
         userFile["text"].append({"time":zeitVar,"text":text})
         dataClass.save(self.path, userFile)
+
+# Klasse um Sortierung zu bekommen
+class sorting:
+    @classmethod
+    def getBlobList(cls, sorting, von, bis):
+        #20 Blobs werden "genommen"
+        home = dataClass.getHomeData()["home"]
+        path = home + "/sorting/" + sorting + ".json" #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
+        srt = dataClass.open(path)[von:bis]
+        # Die Liste von Blobs wird kreiert
+        blobList = []
+        for i in srt:
+            blobPost = blob(i)
+            blobList.append(blobPost)
+        # Liste wird ausgegeben
+        return blobList
+
+#Class für Blobbers(Posts)
+class blob:
+    def __init__(self, postId):
+        #Index wird abgerufen
+        home = dataClass.getHomeData()["home"]
+        indexPath = home + "/index.json"
+        index = dataClass.open(indexPath)
+        #PostId wird gesucht
+        blobPost = index[postId]
+        #upvotes und so werden in Klasse gespeichert
+        self.upvotes = blobPost["upvotes"]
+        self.commentsNumber = blobPost["commentsNumber"]
+    
+    def upvote(self):
+        pass
+    def downvote(self):
+        pass
+    def comment(self):
+        pass   
