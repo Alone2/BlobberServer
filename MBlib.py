@@ -78,12 +78,13 @@ class blobUser:
         # Zeit angeben
         zeit = time.localtime()
         zeitVar = list(zeit[0:7]) 
+        unxTime = time.time()
 
         # Text wird geschpeichert
         userFile = dataClass.open(self.path)
         # upvotes, id, id von comment soll gesprichert werden (Id zufällig gewählt->Test ob
         # es sie schon gibt -> index)
-        userFile["text"].append({"time":zeitVar,"text":text})
+        userFile["text"].append({"time":zeitVar,"unxTime":unxTime, "text":text})
         dataClass.save(self.path, userFile)
 
 # Klasse um Sortierung zu bekommen
@@ -91,7 +92,7 @@ class sorting:
     @classmethod
     def getBlobList(cls, sorting, von, bis):
         #20 Blobs werden "genommen"
-        home = dataClass.getHomeData()["home"]
+        home = dataClass.getHomeData()["HomeFolder"]
         path = home + "/sorting/" + sorting + ".json" #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
         srt = dataClass.open(path)[von:bis]
         # Die Liste von Blobs wird kreiert
@@ -106,7 +107,7 @@ class sorting:
 class blob:
     def __init__(self, postId):
         #Index wird abgerufen
-        home = dataClass.getHomeData()["home"]
+        home = dataClass.getHomeData()["HomeFolder"]
         indexPath = home + "/index.json"
         index = dataClass.open(indexPath)
         #PostId wird gesucht

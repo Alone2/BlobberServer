@@ -8,7 +8,7 @@ def newTrending():
     
 def newHot():
     #Liste mit Blobs wird geoffnet
-    home = dataClass.getHomeData()["home"]
+    home = dataClass.getHomeData()["HomeFolder"]
     indexPath = home + "/index.json"
     index = dataClass.open(indexPath)
 
@@ -19,9 +19,10 @@ def newHot():
         upvotes = i["upvotes"]
         # commentsNumber ist die Anzahl Kommentare
         commentsNumber = i["commentsNumber"]
-        # Wann der Blob veröffentlicht wurde
-        datum = i["date"]
-        
+        # Wann der Blob veröffentlicht wurde als liste: Wie https://docs.python.org/3/library/time.html#time.struct_time
+        datum = i["time"]
+        # Wann der Blob veröffeltlicht wurde seit dem 1. Januar 1970
+        unxDatum = i["unxTime"]
         # Hier kommt ein Algorithmus
         
         # Blobs die es in Hot eingeordnet werden sollen, werden in die Liste hot gespeichert
