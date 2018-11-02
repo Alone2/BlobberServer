@@ -2,6 +2,7 @@
 import json
 import os
 import time
+import random
 # install: pip install --upgrade google-api-python-client
 #          pip install requests
 from google.oauth2 import id_token
@@ -82,10 +83,25 @@ class blobUser:
 
         # Text wird geschpeichert
         userFile = dataClass.open(self.path)
-        # upvotes, id, id von comment soll gesprichert werden (Id zufällig gewählt->Test ob
-        # es sie schon gibt -> index)
-        userFile["text"].append({"time":zeitVar,"unxTime":unxTime, "text":text})
+        #Idee: upvotes und comments(ids) werden auch in Index gespeichert
+        #random Id wird generiert
+        indexPath = self.homeFolder + "/index.json"
+        blobId = self.__getUniqueBlobId(indexPath, 10)
+        #Id wird mit Path in Index gespeichert
+        index = dataClass.open(indexPath)
+        index.append({"id":blobId, "path":self.path})
+        #Blob wird gespeichert
+        userFile["text"].append({"id":blobId, "time":zeitVar,"unxTime":unxTime, "text":text})
         dataClass.save(self.path, userFile)
+
+    def __getUniqueBlobId(self, indexPath, lenght):
+        blobId = []
+        for i in range(lenght):
+            blobId.append(random.choice("qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM1234567890"))
+        index = dataClass.open(indexPath)
+        if blobId in index:
+            blobId = self.__getUniqueBlobId(indexPath, lenght)
+        return blobId
 
 # Klasse um Sortierung zu bekommen
 class sorting:
