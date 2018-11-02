@@ -15,14 +15,21 @@ def newHot():
     hot = []
     # Für jeden Blob wird der Text im For-Loop ausgeführt
     for i in index:
+        postPath = i["path"]
+        userFile = dataClass.open(postPath)
+        pstIfo = {}
+        for postInfo in userFile["text"]:
+            if postInfo["id"] == i["id"]:
+                pstIfo = postInfo
+                break
         # upvotes (downvotes abgezogen)
-        upvotes = i["upvotes"]
+        upvotes = pstIfo["upvotes"]
         # commentsNumber ist die Anzahl Kommentare
-        commentsNumber = i["commentsNumber"]
+        commentsNumber = pstIfo["commentsNumber"]
         # Wann der Blob veröffentlicht wurde als liste: Wie https://docs.python.org/3/library/time.html#time.struct_time
-        datum = i["time"]
+        datum = pstIfo["time"]
         # Wann der Blob veröffeltlicht wurde seit dem 1. Januar 1970
-        unxDatum = i["unxTime"]
+        unxDatum = pstIfo["unxTime"]
         # Hier kommt ein Algorithmus
         
         # Blobs die es in Hot eingeordnet werden sollen, werden in die Liste hot gespeichert
