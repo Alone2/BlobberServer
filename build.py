@@ -9,5 +9,9 @@ fileData = {"HomeFolder":homeFolder, "clientId":googleClient}
 dataClass.save("files.json", fileData)
 
 # index.json wird erstellt
-index = []
-dataClass.save(homeFolder + "/index.json", index)
+emptyList = []
+dataClass.save(homeFolder + "/index.json", emptyList)
+
+# hot und Trending werden erstellt
+dataClass.save(homeFolder + "/sorting/hot.json", emptyList)
+dataClass.save(homeFolder + "/sorting/trending.json", emptyList)
