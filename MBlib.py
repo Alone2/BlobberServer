@@ -90,14 +90,15 @@ class blobUser:
         #Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
         index.append({"id":blobId, "path":self.path})
+        dataClass.save(indexPath, index)
         #Blob wird gespeichert
         userFile["text"].append({"id":blobId, "time":zeitVar,"unxTime":unxTime, "text":text})
         dataClass.save(self.path, userFile)
 
     def __getUniqueBlobId(self, indexPath, lenght):
-        blobId = []
+        blobId = ""
         for i in range(lenght):
-            blobId.append(random.choice("qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM1234567890"))
+            blobId += random.choice("qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM1234567890")
         index = dataClass.open(indexPath)
         if blobId in index:
             blobId = self.__getUniqueBlobId(indexPath, lenght)
