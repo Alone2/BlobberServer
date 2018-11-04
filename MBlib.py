@@ -44,10 +44,10 @@ class blobUser:
         self.isOk = True
         
         # Werte vom json-file werden an blobUser übertragen
-        userFile = dataClass.open(self.path)
-        self.firstName = userFile["info"]["firstName"]
-        self.lastName = userFile["info"]["lastName"]
-        self.mail = userFile["info"]["mail"]
+        self.userFile = dataClass.open(self.path)
+        self.firstName = self.userFile["info"]["firstName"]
+        self.lastName = self.userFile["info"]["lastName"]
+        self.mail = self.userFile["info"]["mail"]
 
     def __tokenReal(self, token):
         # Wird bei Google getestet ob der Acc. echt ist
@@ -83,16 +83,18 @@ class blobUser:
 
         # Text wird geschpeichert
         userFile = dataClass.open(self.path)
-        #Idee: upvotes und comments(ids) werden auch in Index gespeichert
-        #random Id wird generiert
+        # Idee: upvotes und comments(ids) werden auch in Index gespeichert
+        # random Id wird generiert
         indexPath = self.homeFolder + "/index.json"
         blobId = self.__getUniqueBlobId(indexPath, 10)
-        #Id wird mit Path in Index gespeichert
+        # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        index.append({"id":blobId, "path":self.path})
+        """index.append({"id":blobId, "path":self.path})"""
+        index[blobId] = {"path": self.path}
         dataClass.save(indexPath, index)
-        #Blob wird gespeichert
-        userFile["text"].append({"id":blobId, "time":zeitVar,"unxTime":unxTime, "text":text})
+        # Blob wird gespeichert
+        """userFile["text"].append({"id":blobId, "time":zeitVar,"unxTime":unxTime, "text":text})"""
+        userFile["text"][blobId] = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         dataClass.save(self.path, userFile)
 
     def __getUniqueBlobId(self, indexPath, lenght):
@@ -105,9 +107,9 @@ class blobUser:
         return blobId
 
 # Klasse um Sortierung zu bekommen
-class sorting:
+class sortingClass:
     @classmethod
-    def getBlobList(cls, sorting, von, bis):
+    def getBlobJsonList(cls, sorting, von, bis):
         #20 Blobs werden "genommen"
         home = dataClass.getHomeData()["HomeFolder"]
         path = home + "/sorting/" + sorting + ".json" #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
@@ -116,24 +118,29 @@ class sorting:
         blobList = []
         for i in srt:
             blobPost = blob(i)
-            blobList.append(blobPost)
+            blobList.append(blobPost.json)
         # Liste wird ausgegeben
         return blobList
 
 #Class für Blobbers(Posts)
 class blob:
     def __init__(self, postId):
-        #Index wird abgerufen
+        self.postId = postId
+        # Index wird abgerufen
         home = dataClass.getHomeData()["HomeFolder"]
-        indexPath = home + "/index.json"
-        index = dataClass.open(indexPath)
-        #PostId wird gesucht
-        blobPost = index[postId]
-        #upvotes und so werden in Klasse gespeichert
+        self.indexPath = home + "/index.json"
+        index = dataClass.open(self.indexPath)
+        # Pfad wird abgerufen
+        path = index[postId]
+        # PostId wird gesucht
+        blobPost = dataClass.open(path)["text"][postId]
+        # upvotes und so werden in Klasse gespeichert
+        self.json = json.dumps(blobPost, indent=2)
         self.upvotes = blobPost["upvotes"]
         self.commentsNumber = blobPost["commentsNumber"]
+        self.text = blobPost["text"]
     
-    def upvote(self):
+    def upvote(self, blobUser):
         pass
     def downvote(self):
         pass
