@@ -22,7 +22,7 @@ def newHot():
         upvotes = pstIfo["upvotes"]
         # commentsNumber ist die Anzahl Kommentare
         commentsNumber = pstIfo["commentsNumber"]
-        # Wann der Blob veröffentlicht wurde als liste: Wie https://docs.python.org/3/library/time.html#time.struct_time
+        # Wann der Blob veröffentlicht wurde als liste: Wie https://docs.python.org/3/library/time.html#time.struct_time  (nur 1-7)
         datum = pstIfo["time"]
         # Wann der Blob veröffeltlicht wurde seit dem 1. Januar 1970
         unxDatum = pstIfo["unxTime"]

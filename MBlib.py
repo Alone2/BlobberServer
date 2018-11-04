@@ -1,4 +1,3 @@
-# Anmelde Library
 import json
 import os
 import time
@@ -98,12 +97,15 @@ class blobUser:
         dataClass.save(self.path, userFile)
 
     def __getUniqueBlobId(self, indexPath, lenght):
+        # Zufällige Id wird kreiert
         blobId = ""
         for i in range(lenght):
             blobId += random.choice("qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM1234567890")
+        # Wenn die Id schon vergeben ist, wird eine neue kreiert
         index = dataClass.open(indexPath)
         if blobId in index:
             blobId = self.__getUniqueBlobId(indexPath, lenght)
+        # Id wird ausgegeben
         return blobId
 
 # Klasse um Sortierung zu bekommen
@@ -141,6 +143,7 @@ class blob:
         self.text = blobPost["text"]
     
     def upvote(self, blobUser):
+        #Idee: Wenn schon upgevotet: upvote "zurückziehen"
         pass
     def downvote(self):
         pass

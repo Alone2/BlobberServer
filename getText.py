@@ -6,7 +6,7 @@ from MBlib import sortingClass
 
 def main():
     arguments = cgi.FieldStorage()
-    # Wenn die Argumente nicht da sind wird eine Error message ausgegeben
+    # Wenn die Argumente nicht da sind, wird eine Error message ausgegeben
     if (not "sorting" in arguments) or (not "von" in arguments) or (not "bis" in arguments):
         print("error - arguments missing")
         return
