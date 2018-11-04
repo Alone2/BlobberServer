@@ -14,14 +14,10 @@ def newHot():
 
     hot = []
     # Für jeden Blob wird der Text im For-Loop ausgeführt
-    for i in index:
-        postPath = i["path"]
-        userFile = dataClass.open(postPath)
-        pstIfo = {}
-        for postInfo in userFile["text"]:
-            if postInfo["id"] == i["id"]:
-                pstIfo = postInfo
-                break
+    for postId, postData in index.items():
+        userFile = dataClass.open(postData["path"])
+        pstIfo = userFile["text"][postId]
+
         # upvotes (downvotes abgezogen)
         upvotes = pstIfo["upvotes"]
         # commentsNumber ist die Anzahl Kommentare
@@ -33,7 +29,7 @@ def newHot():
         # Hier kommt ein Algorithmus
         
         # Blobs die es in Hot eingeordnet werden sollen, werden in die Liste hot gespeichert
-        hot.append(i["id"])
+        hot.append(postId)
 
     # Hot wird als Datei gespeichert
     hotPath = home + "/sorting/hot.json"
@@ -42,6 +38,13 @@ def newHot():
 
 if __name__ == "__main__":
     while True:
+        print("Trending wird neu generiert")
         newTrending()
+        print("Trending wurde generiert")
+        print("Hot wird neu generiert")
         newHot()
-        time.sleep(3600)
+        print("Hot wurde generiert")
+        zeit = 3600
+        print("warte",zeit,"sek")
+        time.sleep(zeit)
+        
