@@ -70,7 +70,7 @@ class blobUser:
             jsonData = {}
             storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"]}
             jsonData['info'] = storedInfo
-            jsonData['text'] = []
+            jsonData['text'] = {}
             dataClass.save(self.path, jsonData)
 
         return True
@@ -118,7 +118,7 @@ class sortingClass:
         blobList = []
         for i in srt:
             blobPost = blob(i)
-            blobList.append(blobPost.json)
+            blobList.append(blobPost.data)
         # Liste wird ausgegeben
         return blobList
 
@@ -131,11 +131,11 @@ class blob:
         self.indexPath = home + "/index.json"
         index = dataClass.open(self.indexPath)
         # Pfad wird abgerufen
-        path = index[postId]
+        path = index[postId]["path"]
         # PostId wird gesucht
         blobPost = dataClass.open(path)["text"][postId]
         # upvotes und so werden in Klasse gespeichert
-        self.json = json.dumps(blobPost, indent=2)
+        self.data = blobPost
         self.upvotes = blobPost["upvotes"]
         self.commentsNumber = blobPost["commentsNumber"]
         self.text = blobPost["text"]
