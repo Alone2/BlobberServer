@@ -38,13 +38,13 @@ def newHot():
 
 if __name__ == "__main__":
     while True:
-        print("Trending wird neu generiert")
+        print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wird neu generiert")
         newTrending()
-        print("Trending wurde generiert")
-        print("Hot wird neu generiert")
+        print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wurde generiert")
+        print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wird neu generiert")
         newHot()
-        print("Hot wurde generiert")
+        print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wurde generiert")
         zeit = 3600
-        print("warte",zeit,"sek")
+        print(time.strftime("[%H:%M:%S]", time.localtime())+" warte",zeit,"sek")
         time.sleep(zeit)
         
