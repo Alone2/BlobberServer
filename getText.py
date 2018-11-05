@@ -11,7 +11,7 @@ def main():
         print("error - arguments missing")
         return
     # Die blobs werden gesucht und schliesslich ausgegeben
-    blobs = sortingClass.getBlobJsonList(arguments["sorting"].value, int(arguments["von"].value), int(arguments["bis"].value))
+    blobs = sortingClass.getBlobDataList(arguments["sorting"].value, int(arguments["von"].value), int(arguments["bis"].value))
     print(blobs)
 
 if __name__ == "__main__":
