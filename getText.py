@@ -11,7 +11,14 @@ def main():
         print("error - arguments missing")
         return
     # Die blobs werden gesucht und schliesslich ausgegeben
-    blobs = sortingClass.getBlobDataList(arguments["sorting"].value, int(arguments["von"].value), int(arguments["bis"].value))
+    sorting = sortingClass()
+    if arguments["sorting"].value == "hot":
+        sorting = sortingClass.HOT
+    elif arguments["sorting"].value == "trending":
+        sorting = sortingClass.TRENDING
+    else:
+        print("error - kein korrektes Sorting eingegeben")
+    blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))
     print(blobs)
 
 if __name__ == "__main__":

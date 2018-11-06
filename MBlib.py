@@ -110,11 +110,12 @@ class blobUser:
 
 # Klasse um Sortierung zu bekommen
 class sortingClass:
+    HOT, TRENDING = "/sorting/hot.json","/sorting/trending.json"
     @classmethod
     def getBlobDataList(cls, sorting, von, bis):
         # X Blobs werden "genommen"
         home = dataClass.getHomeData()["HomeFolder"]
-        path = home + "/sorting/" + sorting + ".json" #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
+        path = home + sorting #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
         srt = dataClass.open(path)[von:bis]
         # Die Liste von Blobs wird kreiert
         blobList = []
