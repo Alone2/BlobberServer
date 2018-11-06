@@ -70,6 +70,7 @@ class blobUser:
             storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"]}
             jsonData['info'] = storedInfo
             jsonData['text'] = {}
+            jsonData['upvotetPosts'] = []
             dataClass.save(self.path, jsonData)
 
         return True
@@ -88,11 +89,9 @@ class blobUser:
         blobId = self.__getUniqueBlobId(indexPath, 10)
         # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        """index.append({"id":blobId, "path":self.path})"""
         index[blobId] = {"path": self.path}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
-        """userFile["text"].append({"id":blobId, "time":zeitVar,"unxTime":unxTime, "text":text})"""
         userFile["text"][blobId] = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         dataClass.save(self.path, userFile)
 
@@ -134,9 +133,9 @@ class blob:
         self.indexPath = home + "/index.json"
         index = dataClass.open(self.indexPath)
         # Pfad wird abgerufen
-        path = index[postId]["path"]
+        self.path = index[postId]["path"]
         # PostId wird gesucht
-        blobPost = dataClass.open(path)["text"][postId]
+        blobPost = dataClass.open(self.path)["text"][postId]
         # upvotes und so werden in Klasse gespeichert
         self.data = blobPost
         self.upvotes = blobPost["upvotes"]
@@ -144,8 +143,25 @@ class blob:
         self.text = blobPost["text"]
     
     def upvote(self, blobUser):
-        #Idee: Wenn schon upgevotet: upvote "zurückziehen"
-        pass
+        # Daten des gespricherten Posts wird abgerufen
+        blobPost = dataClass.open(self.path)
+        # Daten des upvotenden Users werden abgerufen
+        userData = dataClass.open(blobUser.path)
+        # userData = dataClass.open(blobberUser.data)
+        # Wenn Post schon upgevoted
+        if self.postId in userData["upvotetPosts"]:
+            userData["upvotetPosts"].remove(self.postId)
+            dataClass.save(blobUser.path, userData)
+            # Blob Upvote number wird um eins zurückgesetzt
+            blobPost["text"][self.postId]["upvotes"] -= 1
+            dataClass.save(self.path, blobPost)
+            return
+        # BlobId wird zu upgevoteden Posts hinzugefügt
+        userData["upvotetPosts"].append(self.postId)
+        dataClass.save(blobUser.path, userData)
+        # Blob Upvote number wird erhöht
+        blobPost["text"][self.postId]["upvotes"] += 1
+        dataClass.save(self.path, blobPost)
     def downvote(self):
         pass
     def comment(self):
