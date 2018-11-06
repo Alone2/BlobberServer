@@ -81,8 +81,6 @@ class blobUser:
         zeitVar = list(zeit[0:7]) 
         unxTime = time.time()
 
-        # Text wird geschpeichert
-        userFile = dataClass.open(self.path)
         # Idee: upvotes und comments(ids) werden auch in Index gespeichert
         # random Id wird generiert
         indexPath = self.homeFolder + "/index.json"
@@ -92,8 +90,24 @@ class blobUser:
         index[blobId] = {"path": self.path}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
-        userFile["text"][blobId] = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
-        dataClass.save(self.path, userFile)
+        userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
+        self.writeData(["text",blobId], userData)
+        #dataClass.save(self.path, userData)
+
+    def writeData(self, ort, data):
+        # Daten des gespricherten Posts werden abgerufen
+        userData = dataClass.open(self.path)
+        if len(ort) == 1:
+            userData[ort[0]] = data
+        elif len(ort) == 2:
+            userData[ort[0]][ort[1]] = data
+        elif len(ort) == 3:
+            userData[ort[0]][ort[1]][ort[3]] = data
+        else:
+            # Error
+            return
+        # Die Daten werden gespeichert
+        dataClass.save(self.path, userData)
 
     def __getUniqueBlobId(self, indexPath, lenght):
         # Zufällige Id wird kreiert
@@ -147,7 +161,6 @@ class blob:
         blobPost = dataClass.open(self.path)
         # Daten des upvotenden Users werden abgerufen
         userData = dataClass.open(blobUser.path)
-        # userData = dataClass.open(blobberUser.data)
         # Wenn Post schon upgevoted
         if self.postId in userData["upvotetPosts"]:
             userData["upvotetPosts"].remove(self.postId)
