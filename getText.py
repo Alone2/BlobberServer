@@ -18,7 +18,7 @@ def main():
         sorting = sortingClass.TRENDING
     else:
         print("error - kein korrektes Sorting eingegeben")
-    blobs = sortingClass.getBlobDataList(arguments["sorting"].value, int(arguments["von"].value), int(arguments["bis"].value))
+    blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))
     print(blobs)
 
 if __name__ == "__main__":
