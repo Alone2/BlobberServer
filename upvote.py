@@ -20,7 +20,7 @@ def main():
         return
     # Der Post wird upgevotet
     blobToUpvote = blob(arguments["postId"].value)
-    blobToUpvote.upvote(user)
+    blobToUpvote.upvote(user.path)
     print("done")
 
 if __name__ == "__main__":

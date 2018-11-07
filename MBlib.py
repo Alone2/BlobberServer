@@ -134,7 +134,9 @@ class sortingClass:
         blobList = []
         for i in srt:
             blobPost = blob(i)
-            blobList.append(blobPost.data)
+            data = blobPost.data
+            data["id"] = i
+            blobList.append(data)
         # Liste wird ausgegeben
         return blobList
 
@@ -156,23 +158,23 @@ class blob:
         self.commentsNumber = blobPost["commentsNumber"]
         self.text = blobPost["text"]
     
-    def upvote(self, blobUser):
-        # Daten des gespricherten Posts wird abgerufen
-        blobPost = dataClass.open(self.path)
+    def upvote(self, blobUserPath):
         # Daten des upvotenden Users werden abgerufen
-        userData = dataClass.open(blobUser.path)
+        userData = dataClass.open(blobUserPath)
         # Wenn Post schon upgevoted
         if self.postId in userData["upvotetPosts"]:
             userData["upvotetPosts"].remove(self.postId)
-            dataClass.save(blobUser.path, userData)
+            dataClass.save(blobUserPath, userData)
             # Blob Upvote number wird um eins zurückgesetzt
+            blobPost = dataClass.open(self.path)
             blobPost["text"][self.postId]["upvotes"] -= 1
             dataClass.save(self.path, blobPost)
             return
         # BlobId wird zu upgevoteden Posts hinzugefügt
         userData["upvotetPosts"].append(self.postId)
-        dataClass.save(blobUser.path, userData)
+        dataClass.save(blobUserPath, userData)
         # Blob Upvote number wird erhöht
+        blobPost = dataClass.open(self.path)
         blobPost["text"][self.postId]["upvotes"] += 1
         dataClass.save(self.path, blobPost)
     def downvote(self):
