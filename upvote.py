@@ -18,8 +18,13 @@ def main():
     if user.isOk == False:
         print("error - nicht angemeldet")
         return
-    # Der Post wird upgevotet
+    # Der Post wird abgefragt
     blobToUpvote = blob(arguments["postId"].value)
+    # Wenn der Blob nicht existiert, wird eine Error-Message ausgegeben
+    if blobToUpvote.isOk == False:
+        print("error - ungültige blob-id")
+        return
+    # Der Blob wird upgevotet
     blobToUpvote.upvote(user.path)
     print("done")
 

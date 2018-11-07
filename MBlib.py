@@ -148,15 +148,20 @@ class blob:
         home = dataClass.getHomeData()["HomeFolder"]
         self.indexPath = home + "/index.json"
         index = dataClass.open(self.indexPath)
-        # Pfad wird abgerufen
-        self.path = index[postId]["path"]
-        # PostId wird gesucht
-        blobPost = dataClass.open(self.path)["text"][postId]
-        # upvotes und so werden in Klasse gespeichert
-        self.data = blobPost
-        self.upvotes = blobPost["upvotes"]
-        self.commentsNumber = blobPost["commentsNumber"]
-        self.text = blobPost["text"]
+        # wird geschaut ob der Blob überhaubt existiert -> wenn nicht -> isOk = False
+        try:
+            # Pfad wird abgerufen
+            self.path = index[postId]["path"]
+            # PostId wird gesucht
+            blobPost = dataClass.open(self.path)["text"][postId]
+            # upvotes und so werden in Klasse gespeichert
+            self.data = blobPost
+            self.upvotes = blobPost["upvotes"]
+            self.commentsNumber = blobPost["commentsNumber"]
+            self.text = blobPost["text"]
+            self.isOk = True
+        except:
+            self.isOk = False
     
     def upvote(self, blobUserPath):
         # Daten des upvotenden Users werden abgerufen
