@@ -8,7 +8,7 @@ def newTrending():
     
 def newHot():
     #Liste mit Blobs wird geoffnet
-    home = dataClass.getHomeData()["HomeFolder"]
+    home = dataClass.open("files.json")["HomeFolder"]
     indexPath = home + "/index.json"
     index = dataClass.open(indexPath)
 

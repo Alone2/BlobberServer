@@ -23,19 +23,9 @@ class dataClass:
         jsonFile.write(dataJSON)
         jsonFile.close()
 
-    @classmethod
-    def getHomeData(cls):
-        #Der Ort der Dateien wird von files.json ausgelesen und ausgegeben
-        path = 'files.json'
-        data = cls.open(path)
-        return data
-
 # Klasse des Nutzers
 class blobUser:
     def __init__(self, token):
-        #Home angeben
-        self.homeData = dataClass.getHomeData()
-        self.homeFolder = dataClass.getHomeData()["HomeFolder"]
         # Testen ob der Account echt ist. Wenn ja -> isOk = True
         if not self.__tokenReal(token):
             self.isOk = False
@@ -51,11 +41,11 @@ class blobUser:
     def __tokenReal(self, token):
         # Wird bei Google getestet ob der Acc. echt ist
         try:
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), self.homeData["clientId"])
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), BlobberHomeData["clientId"])
             self.userId = idinfo['sub']
             
             # Path wird definiert
-            self.path = self.homeFolder + "/user/" + self.userId + ".json"
+            self.path = BlobberHomeFolder + "/user/" + self.userId + ".json"
         
         except ValueError:
             return False
@@ -83,7 +73,7 @@ class blobUser:
 
         # Idee: upvotes und comments(ids) werden auch in Index gespeichert
         # random Id wird generiert
-        indexPath = self.homeFolder + "/index.json"
+        indexPath = BlobberHomeFolder + "/index.json"
         blobId = self.__getUniqueBlobId(indexPath, 10)
         # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
@@ -127,8 +117,7 @@ class sortingClass:
     @classmethod
     def getBlobDataList(cls, sorting, von, bis):
         # X Blobs werden "genommen"
-        home = dataClass.getHomeData()["HomeFolder"]
-        path = home + sorting #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
+        path = BlobberHomeFolder + sorting #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
         srt = dataClass.open(path)[von:bis]
         # Die Liste von Blobs wird kreiert
         blobList = []
@@ -140,13 +129,12 @@ class sortingClass:
         # Liste wird ausgegeben
         return blobList
 
-#Class für Blobbers(Posts)
+# Class für Blobbers(Posts)
 class blob:
     def __init__(self, postId):
         self.postId = postId
         # Index wird abgerufen
-        home = dataClass.getHomeData()["HomeFolder"]
-        self.indexPath = home + "/index.json"
+        self.indexPath = BlobberHomeFolder + "/index.json"
         index = dataClass.open(self.indexPath)
         # wird geschaut ob der Blob überhaubt existiert -> wenn nicht -> isOk = False
         try:
@@ -186,3 +174,7 @@ class blob:
         pass
     def comment(self):
         pass   
+
+# Das Home Dateienverzeichnis wird definiert
+BlobberHomeData = dataClass.open("files.json")
+BlobberHomeFolder = BlobberHomeData["HomeFolder"]
