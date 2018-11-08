@@ -11,6 +11,7 @@ dataClass.save("files.json", fileData)
 # index.json wird erstellt
 emptyDict = {}
 dataClass.save(homeFolder + "/index.json", emptyDict)
+dataClass.save(homeFolder + "/userlist.json", emptyDict)
 
 # hot und Trending werden erstellt
 emptyList = []

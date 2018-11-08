@@ -56,7 +56,16 @@ class blobUser:
         # Wenn der User noch nicht im System ist, wird ihm ein File erstellt
         # -> Wenn der User sich manuell anmelden sollte -> Später durch Instanz ersetzen
         if not os.path.isfile(self.path):
+            # Eine User-Id wird generiert
+            userlistPath = BlobberHomeFolder + "/userlist.json"
+            userId = self.__getUniqueBlobId(userlistPath, 10)
+            # User-Id wird mit Path in Index gespeichert
+            index = dataClass.open(userlistPath)
+            index[userId] = {"path": self.path}
+            dataClass.save(userlistPath, index)
+            # Daten des Nutzers werden gespeichert
             jsonData = {}
+            jsonData['userId'] = userId
             storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"]}
             jsonData['info'] = storedInfo
             jsonData['text'] = {}
@@ -99,15 +108,15 @@ class blobUser:
         # Die Daten werden gespeichert
         dataClass.save(self.path, userData)
 
-    def __getUniqueBlobId(self, indexPath, lenght):
+    def __getUniqueBlobId(self, path, lenght):
         # Zufällige Id wird kreiert
         blobId = ""
         for i in range(lenght):
             blobId += random.choice("qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM1234567890")
         # Wenn die Id schon vergeben ist, wird eine neue kreiert
-        index = dataClass.open(indexPath)
+        index = dataClass.open(path)
         if blobId in index:
-            blobId = self.__getUniqueBlobId(indexPath, lenght)
+            blobId = self.__getUniqueBlobId(path, lenght)
         # Id wird ausgegeben
         return blobId
 
