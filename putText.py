@@ -7,9 +7,13 @@ from MBlib import dataClass
 
 def main():
     arguments = cgi.FieldStorage()
-    # Wenn die Argumente nicht da sind, wird eine Error message ausgegeben
+    # Wenn die Argumente nicht da sind, wird eine Error-Message ausgegeben
     if (not "idTkn" in arguments) or (not "text" in arguments):
         print("error - arguments missing")
+        return
+    # Wenn der Blob mehr als 300 Zeichen hat, wird eine Error-Message ausgegeben
+    if len(arguments["text"].value) >= 300:
+        print("error - blob too long(more than 300 characters)")
         return
     # BlobUser wird aus idTkn generiert
     user = blobUser(arguments["idTkn"].value)
