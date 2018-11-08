@@ -37,6 +37,7 @@ class blobUser:
         self.firstName = self.userFile["info"]["firstName"]
         self.lastName = self.userFile["info"]["lastName"]
         self.mail = self.userFile["info"]["mail"]
+        self.username = self.userFile["info"]["username"]
 
     def __tokenReal(self, token):
         # Wird bei Google getestet ob der Acc. echt ist
@@ -65,11 +66,11 @@ class blobUser:
             dataClass.save(userlistPath, index)
             # Daten des Nutzers werden gespeichert
             jsonData = {}
-            jsonData['userId'] = userId
-            storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"]}
+            storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"], "userId":userId,"username":"unnamed"}
             jsonData['info'] = storedInfo
             jsonData['text'] = {}
             jsonData['upvotetPosts'] = []
+            jsonData['downvotetPosts'] = []
             dataClass.save(self.path, jsonData)
 
         return True
@@ -134,6 +135,8 @@ class sortingClass:
             blobPost = blob(i)
             data = blobPost.data
             data["id"] = i
+            data["OP"] = blobPost.OP
+            data["OP_id"] = blobPost.OP_id
             blobList.append(data)
         # Liste wird ausgegeben
         return blobList
@@ -150,12 +153,15 @@ class blob:
             # Pfad wird abgerufen
             self.path = index[postId]["path"]
             # PostId wird gesucht
-            blobPost = dataClass.open(self.path)["text"][postId]
+            blobPost = dataClass.open(self.path)
+            blobPostText = blobPost["text"][postId]
             # upvotes und so werden in Klasse gespeichert
-            self.data = blobPost
-            self.upvotes = blobPost["upvotes"]
-            self.commentsNumber = blobPost["commentsNumber"]
-            self.text = blobPost["text"]
+            self.OP = blobPost["info"]["username"]
+            self.OP_id = blobPost["info"]["userId"]
+            self.data = blobPostText
+            self.upvotes = blobPostText["upvotes"]
+            self.commentsNumber = blobPostText["commentsNumber"]
+            self.text = blobPostText["text"]
             self.isOk = True
         except:
             self.isOk = False
