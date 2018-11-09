@@ -149,9 +149,7 @@ class blob:
         self.indexPath = BlobberHomeFolder + "/index.json"
         # wird geschaut ob der Blob überhaubt existiert -> wenn nicht -> isOk = False
         try:
-            blobPost = self.__getBlobPost()
-            
-            blobPostText = blobPost["text"][self.postId] # Bei Comments dann wahrscheinlicht nicht "text"
+            blobPost, blobPostText = self.__getBlobPost()
             # upvotes und so werden in Klasse gespeichert
             self.OP = blobPost["info"]["username"]
             self.OP_id = blobPost["info"]["userId"]
@@ -169,7 +167,9 @@ class blob:
         # Pfad wird abgerufen
         self.path = index[self.postId]["path"]
         # PostId wird ausgegeben
-        return dataClass.open(self.path)
+        blobPost =  dataClass.open(self.path)
+        blobPostText = blobPost["text"][self.postId]
+        return blobPost,blobPostText
 
     def vote(self, blobUserPath, upvote):
         # Wird geschaut ob upgevoted oder downgevoted werden muss
@@ -219,7 +219,9 @@ class comment(blob):
         # Pfad wird abgerufen
         self.path = index[self.postId]["comments"][self.commentId]["path"]
         # PostId wird ausgegeben
-        return dataClass.open(self.path)
+        blobPost =  dataClass.open(self.path)
+        blobPostText = blobPost["comments"][self.postId]
+        return blobPost,blobPostText
 
 # Das Home Dateienverzeichnis wird definiert
 BlobberHomeData = dataClass.open("files.json")
