@@ -147,14 +147,11 @@ class blob:
         self.postId = postId
         # Index wird abgerufen
         self.indexPath = BlobberHomeFolder + "/index.json"
-        index = dataClass.open(self.indexPath)
         # wird geschaut ob der Blob überhaubt existiert -> wenn nicht -> isOk = False
         try:
-            # Pfad wird abgerufen
-            self.path = index[postId]["path"]
-            # PostId wird gesucht
-            blobPost = dataClass.open(self.path)
-            blobPostText = blobPost["text"][postId]
+            blobPost = self.__getBlobPost()
+            
+            blobPostText = blobPost["text"][self.postId] # Bei Comments dann wahrscheinlicht nicht "text"
             # upvotes und so werden in Klasse gespeichert
             self.OP = blobPost["info"]["username"]
             self.OP_id = blobPost["info"]["userId"]
@@ -165,6 +162,14 @@ class blob:
             self.isOk = True
         except:
             self.isOk = False
+
+    def __getBlobPost(self):
+        # Index wird geöffnet
+        index = dataClass.open(self.indexPath)
+        # Pfad wird abgerufen
+        self.path = index[self.postId]["path"]
+        # PostId wird ausgegeben
+        return dataClass.open(self.path)
 
     def vote(self, blobUserPath, upvote):
         # Wird geschaut ob upgevoted oder downgevoted werden muss
@@ -200,9 +205,21 @@ class blob:
         blobPost = dataClass.open(self.path)
         blobPost["text"][self.postId]["upvotes"] += addition
         dataClass.save(self.path, blobPost)
+  
 
-    def comment(self):
-        pass   
+# Klasse für Kommentare
+class comment(blob):
+    def __init__(self, postId, commentId):
+        self.commentId = commentId
+        super().__init__(postId)
+
+    def __getBlobPost(self):
+        # Index wird geöffnet
+        index = dataClass.open(self.indexPath)
+        # Pfad wird abgerufen
+        self.path = index[self.postId]["comments"][self.commentId]["path"]
+        # PostId wird ausgegeben
+        return dataClass.open(self.path)
 
 # Das Home Dateienverzeichnis wird definiert
 BlobberHomeData = dataClass.open("files.json")
