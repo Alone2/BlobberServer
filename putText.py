@@ -27,7 +27,8 @@ def main():
         if not "postId" in arguments:
             print("error - arguments missing")
             return
-        user.comment(text, arguments["postId"].value)
+        user.comment(arguments["postId"].value, text)
+        print("done")
         return
     else:
         # Blob wird gespeichert

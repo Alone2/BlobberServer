@@ -86,7 +86,7 @@ class blobUser:
         blobId = self.__getUniqueBlobId(indexPath, 10)
         # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        index[blobId] = {"path": self.path}
+        index[blobId] = {"path": self.path, "comments":{}}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
