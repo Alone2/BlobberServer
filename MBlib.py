@@ -69,6 +69,7 @@ class blobUser:
             storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"], "userId":userId,"username":"unnamed"}
             jsonData['info'] = storedInfo
             jsonData['text'] = {}
+            jsonData['comments'] = {}
             jsonData['upvotedPosts'] = []
             jsonData['downvotedPosts'] = []
             dataClass.save(self.path, jsonData)
@@ -80,8 +81,6 @@ class blobUser:
         zeit = time.localtime()
         zeitVar = list(zeit[0:7]) 
         unxTime = time.time()
-
-        # Idee: upvotes und comments(ids) werden auch in Index gespeichert
         # random Id wird generiert
         indexPath = BlobberHomeFolder + "/index.json"
         blobId = self.__getUniqueBlobId(indexPath, 10)
@@ -93,6 +92,22 @@ class blobUser:
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         self.writeData(["text",blobId], userData)
         #dataClass.save(self.path, userData)
+
+    def comment(self, postId, text):
+        # Zeit angeben
+        zeit = time.localtime()
+        zeitVar = list(zeit[0:7]) 
+        unxTime = time.time()
+        # random Id wird generiert
+        indexPath = BlobberHomeFolder + "/index.json"
+        commentId = self.__getUniqueBlobId(indexPath, 10)
+        # Id wird mit Path in Index gespeichert
+        index = dataClass.open(indexPath)
+        index[postId]["comments"][commentId] = {"path": self.path}
+        dataClass.save(indexPath, index)
+        # Blob wird gespeichert
+        userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
+        self.writeData(["comments",commentId], userData)
 
     def writeData(self, ort, data):
         # Daten des gespricherten Posts werden abgerufen
@@ -220,7 +235,7 @@ class comment(blob):
         self.path = index[self.postId]["comments"][self.commentId]["path"]
         # PostId wird ausgegeben
         blobPost =  dataClass.open(self.path)
-        blobPostText = blobPost["comments"][self.postId]
+        blobPostText = blobPost["comments"][self.commentId]
         return blobPost,blobPostText
 
 # Das Home Dateienverzeichnis wird definiert
