@@ -1,12 +1,28 @@
-#In disem Programm wird der Content sortiert
+#In disem Programm wird der Content sortier
+#pip install schedule
 import time
+import schedule
 from MBlib import dataClass
 
 def newTrending():
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wird neu generiert")
     # Wie newHot()
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wurde generiert")
+    pass
+
+def newNew():
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" New wird neu generiert")
+    # Idee New ist Rückwärts: neuste Posts als letztes -> einfacher um abzurufen -> Um Mitternacht wird das ganze resettet
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" New wurde generiert")
     pass
     
 def newHot():
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wird neu generiert")
     #Liste mit Blobs wird geoffnet
     home = dataClass.open("files.json")["HomeFolder"]
     indexPath = home + "/index.json"
@@ -34,17 +50,18 @@ def newHot():
     # Hot wird als Datei gespeichert
     hotPath = home + "/sorting/hot.json"
     dataClass.save(hotPath, hot)
-  
+    # Zeit wird ausgegeben
+    print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wurde generiert")
 
 if __name__ == "__main__":
+    print("Blobber-Server V0.1 wird gestartet...")
+    # Scheudle Tasks werden definiert
+    schedule.every().hour.do(newTrending)
+    schedule.every().hour.do(newHot)
+    schedule.every(2).minutes.do(newNew)
+    print("Blobber-Server wurde gestartet")
     while True:
-        print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wird neu generiert")
-        newTrending()
-        print(time.strftime("[%H:%M:%S]", time.localtime())+" Trending wurde generiert")
-        print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wird neu generiert")
-        newHot()
-        print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wurde generiert")
-        zeit = 3600
-        print(time.strftime("[%H:%M:%S]", time.localtime())+" warte",zeit,"sek")
-        time.sleep(zeit)
+        # Scheudle Tasks werden am Leben gehalten/ ausgeführt
+        schedule.run_pending()
+        time.sleep(1)
         
