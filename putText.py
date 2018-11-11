@@ -4,6 +4,7 @@ import cgi
 import json
 from MBlib import blobUser
 from MBlib import dataClass
+from MBlib import blob
 
 def main():
     arguments = cgi.FieldStorage()
@@ -26,6 +27,11 @@ def main():
     if arguments["comment"].value == "true":
         if not "postId" in arguments:
             print("error - arguments missing")
+            return
+        blobToComment = blob(arguments["postId"].value)
+        # Wenn der Blob nicht existiert, wird eine Error-Message ausgegeben
+        if blobToComment.isOk == False:
+            print("error - ungültige blob-id")
             return
         user.comment(arguments["postId"].value, text)
         print("done")
