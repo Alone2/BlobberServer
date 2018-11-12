@@ -142,7 +142,7 @@ class blobUser:
 
 # Klasse um Sortierung zu bekommen
 class sortingClass:
-    HOT, TRENDING = "/sorting/hot.json","/sorting/trending.json"
+    HOT, TRENDING, NEW = "/sorting/hot.json","/sorting/trending.json","/sorting/new.json"
     @classmethod
     def getBlobDataList(cls, sorting, von, bis):
         # X Blobs werden "genommen"

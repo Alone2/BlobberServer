@@ -16,5 +16,6 @@ dataClass.save(homeFolder + "/userlist.json", emptyDict)
 
 # hot und Trending werden erstellt
 emptyList = []
+dataClass.save(homeFolder + "/sorting/new.json", emptyList)
 dataClass.save(homeFolder + "/sorting/hot.json", emptyList)
 dataClass.save(homeFolder + "/sorting/trending.json", emptyList)

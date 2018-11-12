@@ -16,6 +16,8 @@ def main():
         sorting = sortingClass.HOT
     elif arguments["sorting"].value == "trending":
         sorting = sortingClass.TRENDING
+    elif arguments["sorting"].value == "new":
+        sorting = sortingClass.NEW
     else:
         print("error - kein korrektes Sorting eingegeben")
     blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))

@@ -17,8 +17,22 @@ def newNew():
     print(time.strftime("[%H:%M:%S]", time.localtime())+" New wird neu generiert")
     # Idee New ist Rückwärts: neuste Posts als letztes -> einfacher um abzurufen -> Um Mitternacht wird das ganze resettet
     # Zeit wird ausgegeben
+
+    #Liste mit Blobs wird geoffnet
+    home = dataClass.open("files.json")["HomeFolder"]
+    indexPath = home + "/index.json"
+    index = dataClass.open(indexPath)
+    #New wird geöffnet
+    newPath = home + "/sorting/new.json"
+    new = dataClass.open(newPath)
+    # Für jeden Blob wird der Text im For-Loop ausgeführt
+    for postId in index:
+        if not postId in new:
+            new.append(postId)
+    # Wird gespeichert
+    dataClass.save(newPath, new)
+    # Zeit wird ausgegeben
     print(time.strftime("[%H:%M:%S]", time.localtime())+" New wurde generiert")
-    pass
     
 def newHot():
     # Zeit wird ausgegeben
@@ -54,7 +68,7 @@ def newHot():
     print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wurde generiert")
 
 if __name__ == "__main__":
-    print("Blobber-Server V0.1 wird gestartet...")
+    print("Blobber-Server V0.1.1 wird gestartet...")
     # Scheudle Tasks werden definiert
     schedule.every().hour.do(newTrending)
     schedule.every().hour.do(newHot)
