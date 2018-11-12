@@ -86,7 +86,7 @@ class blobUser:
         blobId = self.__getUniqueBlobId(indexPath, 10)
         # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        index[blobId] = {"path": self.path, "comments":{}}
+        index[blobId] = {"path": self.path, "comments":[]}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
@@ -98,12 +98,16 @@ class blobUser:
         zeit = time.localtime()
         zeitVar = list(zeit[0:7]) 
         unxTime = time.time()
-        # random Id wird generiert
+        # comment wird in commentIndex mit einer random Id gespeichert
+        commentIndexPath = BlobberHomeFolder + "/commentIndex.json"
+        commentId = self.__getUniqueBlobId(commentIndexPath, 10)
+        commentIndex = dataClass.open(commentIndexPath)
+        commentIndex[commentId] = {"path": self.path}
+        dataClass.save(commentIndexPath, commentIndex)
+        # Id wird in Index gespeichert
         indexPath = BlobberHomeFolder + "/index.json"
-        commentId = self.__getUniqueBlobId(indexPath, 10)
-        # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        index[postId]["comments"][commentId] = {"path": self.path}
+        index[postId]["comments"].append(commentId)
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
@@ -155,6 +159,13 @@ class sortingClass:
             blobList.append(data)
         # Liste wird ausgegeben
         return blobList
+    
+    @classmethod
+    def getCommentList(cls, sorting, von, bis, postId):
+        index = dataClass.open(BlobberHomeFolder + "/index.json")
+        # CommentId's werdenn abgerufen
+        comments = index[postId]["comments"]
+        # work in progress ...
 
 # Class für Blobbers(Posts)
 class blob:
@@ -224,18 +235,17 @@ class blob:
 
 # Klasse für Kommentare
 class comment(blob):
-    def __init__(self, postId, commentId):
-        self.commentId = commentId
-        super().__init__(postId)
+    def __init__(self, commentId):
+        super().__init__(commentId)
 
     def __getBlobPost(self):
         # Index wird geöffnet
-        index = dataClass.open(self.indexPath)
+        index = dataClass.open(BlobberHomeFolder + "/commentIndex.json")
         # Pfad wird abgerufen
-        self.path = index[self.postId]["comments"][self.commentId]["path"]
+        self.path = index[self.postId]["path"]
         # PostId wird ausgegeben
         blobPost =  dataClass.open(self.path)
-        blobPostText = blobPost["comments"][self.commentId]
+        blobPostText = blobPost["comments"][self.postId]
         return blobPost,blobPostText
 
 # Das Home Dateienverzeichnis wird definiert
