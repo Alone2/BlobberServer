@@ -9,7 +9,7 @@ from MBlib import blob
 def main():
     arguments = cgi.FieldStorage()
     # Wenn die Argumente nicht da sind, wird eine Error-Message ausgegeben
-    if (not "idTkn" in arguments) or (not "text" in arguments) or (not "comment" in arguments):
+    if (not "idTkn" in arguments) or (not "text" in arguments):
         print("error - arguments missing")
         return
     # Wenn der Blob mehr als 300 Zeichen hat, wird eine Error-Message ausgegeben
@@ -23,17 +23,14 @@ def main():
     if user.isOk == False:
         print("error - nicht angemeldet")
         return
-    # Wird geschaut ob es en Kommentar ist
-    if arguments["comment"].value == "true":
-        if not "postId" in arguments:
-            print("error - arguments missing")
-            return
-        blobToComment = blob(arguments["postId"].value)
+    # Wird geschaut ob es als ein Kommentat deklariert worden ist
+    if "comment" in arguments:
+        blobToComment = blob(arguments["comment"].value)
         # Wenn der Blob nicht existiert, wird eine Error-Message ausgegeben
         if blobToComment.isOk == False:
             print("error - ungültige blob-id")
             return
-        user.comment(arguments["postId"].value, text)
+        user.comment(arguments["comment"].value, text)
         print("done")
         return
     else:
