@@ -165,17 +165,27 @@ class sortingClass:
         index = dataClass.open(BlobberHomeFolder + "/index.json")
         # CommentId's werdenn abgerufen
         comments = index[postId]["comments"]
-        # work in progress ...
+        #Liste mit Kommentaren wird generiert
+        commentsList = []
+        for com in comments:
+            commentPost = comment(com)
+            data = commentPost.data
+            data["id"] = com
+            data["OP"] = commentPost.OP
+            data["OP_id"] = commentPost.OP_id
+            commentsList.append(data)
+        return commentsList
+        # Sorting noch nicht implementiert!
 
 # Class für Blobbers(Posts)
 class blob:
-    def __init__(self, postId):
+    def __init__(self, postId, dataVar = "text", indexPath = "/index.json"):
         self.postId = postId
         # Index wird abgerufen
-        self.indexPath = BlobberHomeFolder + "/index.json"
+        self.indexPath = BlobberHomeFolder + indexPath
         # wird geschaut ob der Blob überhaubt existiert -> wenn nicht -> isOk = False
         try:
-            blobPost, blobPostText = self.__getBlobPost()
+            blobPost, blobPostText = self.__getBlobPost(dataVar)
             # upvotes und so werden in Klasse gespeichert
             self.OP = blobPost["info"]["username"]
             self.OP_id = blobPost["info"]["userId"]
@@ -184,17 +194,17 @@ class blob:
             self.commentsNumber = blobPostText["commentsNumber"]
             self.text = blobPostText["text"]
             self.isOk = True
-        except:
-            self.isOk = False
+        except Exception as e:
+            self.isOk = e
 
-    def __getBlobPost(self):
+    def __getBlobPost(self, dataVar):
         # Index wird geöffnet
         index = dataClass.open(self.indexPath)
         # Pfad wird abgerufen
         self.path = index[self.postId]["path"]
         # PostId wird ausgegeben
         blobPost =  dataClass.open(self.path)
-        blobPostText = blobPost["text"][self.postId]
+        blobPostText = blobPost[dataVar][self.postId]
         return blobPost,blobPostText
 
     def vote(self, blobUserPath, upvote):
@@ -236,17 +246,8 @@ class blob:
 # Klasse für Kommentare
 class comment(blob):
     def __init__(self, commentId):
-        super().__init__(commentId)
-
-    def __getBlobPost(self):
-        # Index wird geöffnet
-        index = dataClass.open(BlobberHomeFolder + "/commentIndex.json")
-        # Pfad wird abgerufen
-        self.path = index[self.postId]["path"]
-        # PostId wird ausgegeben
-        blobPost =  dataClass.open(self.path)
-        blobPostText = blobPost["comments"][self.postId]
-        return blobPost,blobPostText
+        super().__init__(commentId, "comments", "/commentIndex.json")
+    #Hier kommt dann noch vote und so
 
 # Das Home Dateienverzeichnis wird definiert
 BlobberHomeData = dataClass.open("files.json")

@@ -10,6 +10,11 @@ def main():
     if (not "sorting" in arguments) or (not "von" in arguments) or (not "bis" in arguments):
         print("error - arguments missing")
         return
+    #wird geschaut ob es ein Kommentar ist
+    if "comment" in arguments:
+        blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
+        print(blobs)
+        return
     # Die blobs werden gesucht und schliesslich ausgegeben
     sorting = sortingClass()
     if arguments["sorting"].value == "hot":
