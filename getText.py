@@ -3,6 +3,7 @@ print("Content-type: text/html\n\n")
 import cgi
 import json
 from MBlib import sortingClass
+from MBlib import blob
 
 def main():
     arguments = cgi.FieldStorage()
@@ -12,6 +13,9 @@ def main():
         return
     #wird geschaut ob es ein Kommentar ist
     if "comment" in arguments:
+        if blob(arguments["comment"].value).isOk != True:
+            print("error - invalid blob")
+            return
         blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
         print(blobs)
         return
