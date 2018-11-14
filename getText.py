@@ -27,6 +27,13 @@ def main():
         sorting = sortingClass.TRENDING
     elif arguments["sorting"].value == "new":
         sorting = sortingClass.NEW
+    elif arguments["sorting"].value == "user":
+        sorting = sortingClass.USER
+        if not "userId" in arguments:
+            print("error - keine userId angegeben")
+        userId = arguments["userId"]
+        blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), userId.value)
+        print(blobs)
     else:
         print("error - kein korrektes Sorting eingegeben")
     blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))

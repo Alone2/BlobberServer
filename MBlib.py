@@ -146,12 +146,22 @@ class blobUser:
 
 # Klasse um Sortierung zu bekommen
 class sortingClass:
-    HOT, TRENDING, NEW = "/sorting/hot.json","/sorting/trending.json","/sorting/new.json"
+    HOT, TRENDING, NEW, USER = "/sorting/hot.json","/sorting/trending.json","/sorting/new.json", 87
     @classmethod
-    def getBlobDataList(cls, sorting, von, bis):
-        # X Blobs werden "genommen"
-        path = BlobberHomeFolder + sorting #Bei New vielleicht anders. Bei New auch: clickedTime -> Zeit bei Aktuallisierung von New
-        srt = dataClass.open(path)[von:bis]
+    def getBlobDataList(cls, sorting, von, bis, userId = ""):
+        srt = []
+        if sorting == cls.USER:
+            # X Blobs werden "genommen"
+            userPath = dataClass.open(BlobberHomeFolder + "/userlist.json")[userId]["path"]
+            dat = dataClass.open(userPath)["text"]
+            for x, y in dat.items():
+                srt.append(str(x)) #Ist nicht normaler String, sondern {}
+            # später ... nach time sortieren...
+            srt = srt[von:bis]
+        else:
+            # X Blobs werden "genommen"
+            path = BlobberHomeFolder + sorting
+            srt = dataClass.open(path)[von:bis]
         # Die Liste von Blobs wird kreiert
         blobList = []
         for i in srt:
