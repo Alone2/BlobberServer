@@ -109,6 +109,10 @@ class blobUser:
         index = dataClass.open(indexPath)
         index[postId]["comments"].append(commentId)
         dataClass.save(indexPath, index)
+        # Commentsnumber wird erhöht
+        blobPost = dataClass.open(index[postId]["path"])
+        blobPost["text"][postId]["commentsNumber"] += 1
+        dataClass.save(index[postId]["path"], blobPost)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         self.writeData(["comments",commentId], userData)
