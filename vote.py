@@ -21,7 +21,7 @@ def main():
     # Der Post wird abgefragt
     blobToUpvote = blob(arguments["postId"].value)
     # Wenn der Blob nicht existiert, wird eine Error-Message ausgegeben
-    if blobToUpvote.isOk == False:
+    if blobToUpvote.isOk != True:
         print("error - ungültige blob-id")
         return
     # Wird geschaut ob der Post up oder downgevotet werden sollte
