@@ -144,6 +144,15 @@ class blobUser:
         # Id wird ausgegeben
         return blobId
 
+    def save(self):
+        myData = dataClass.open(self.path)
+        myData["info"]["firstName"] = self.firstName
+        myData["info"]["lastName"] = self.lastName
+        myData["info"]["mail"] = self.mail 
+        myData["info"]["username"] = self.username
+        dataClass.save(self.path,myData)
+        
+
 # Klasse um Sortierung zu bekommen
 class sortingClass:
     HOT, TRENDING, NEW, USER = "/sorting/hot.json","/sorting/trending.json","/sorting/new.json", 87
