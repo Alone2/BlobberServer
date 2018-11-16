@@ -157,7 +157,10 @@ class blobUser:
         #dataClass.save(self.path,myData)
         # Daten werden gespeichert
         dataJSON = json.dumps(myData, indent=2)
+        # wird überschrieben
+        jsonFile.seek(0)
         jsonFile.write(dataJSON)
+        jsonFile.truncate()
         jsonFile.close()
         
 
@@ -225,8 +228,11 @@ class blob:
             self.commentsNumber = blobPostText["commentsNumber"]
             self.text = blobPostText["text"]
             self.isOk = True
-        except Exception as e:
-            self.isOk = e
+        except:
+            self.isOk = False
+        #Debug
+        """except Exception as e:
+            self.isOk = e"""
 
     def __getBlobPost(self, dataVar):
         # Index wird geöffnet
