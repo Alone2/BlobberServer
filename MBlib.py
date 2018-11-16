@@ -145,12 +145,20 @@ class blobUser:
         return blobId
 
     def save(self):
-        myData = dataClass.open(self.path)
+        # Daten werden geholt
+        jsonFile = open(self.path, 'r+')
+        myData = json.loads(jsonFile.read())
+        #myData = dataClass.open(self.path)
+        # Daten des Objekts werden aufgeschrieben
         myData["info"]["firstName"] = self.firstName
         myData["info"]["lastName"] = self.lastName
         myData["info"]["mail"] = self.mail 
         myData["info"]["username"] = self.username
-        dataClass.save(self.path,myData)
+        #dataClass.save(self.path,myData)
+        # Daten werden gespeichert
+        dataJSON = json.dumps(myData, indent=2)
+        jsonFile.write(dataJSON)
+        jsonFile.close()
         
 
 # Klasse um Sortierung zu bekommen
