@@ -18,7 +18,7 @@ def main():
             print("error - invalid blob")
             return
         blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
-        print(blobs)
+        print(json.dumps(blobs))
         return
     # Die blobs werden gesucht und schliesslich ausgegeben
     sorting = sortingClass()
@@ -35,7 +35,7 @@ def main():
             return
         userId = arguments["userId"]
         blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), userId.value)
-        print(blobs)
+        print(json.dumps(blobs))
         return
     else:
         print("error - kein korrektes Sorting eingegeben")
@@ -49,9 +49,9 @@ def main():
                 print("error - anmeldung schiefgelaufen")
                 return
             blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), "", blobUsr.getVotetPosts())
-            print(blobs)
+            print(json.dumps(blobs))
     blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))
-    print(blobs)
+    print(json.dumps(blobs))
 
 if __name__ == "__main__":
     # Beim Starten wird die Funktion main ausgeführt
