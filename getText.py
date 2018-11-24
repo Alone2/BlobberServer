@@ -50,6 +50,7 @@ def main():
                 return
             blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), "", blobUsr.getVotetPosts())
             print(json.dumps(blobs))
+            return
     blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))
     print(json.dumps(blobs))
 
