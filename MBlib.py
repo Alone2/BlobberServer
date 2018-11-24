@@ -162,13 +162,20 @@ class blobUser:
         jsonFile.write(dataJSON)
         jsonFile.truncate()
         jsonFile.close()
-        
 
+    def getVotetPosts(self):
+        # up und downgevotete Post werden so: {"up":[],"down":[]} ausgegeben
+        userData = dataClass.open(self.path)
+        voted = {}
+        voted["up"] = userData["upvotedPosts"]
+        voted["down"] = userData["downvotedPosts"]
+        return voted
+        
 # Klasse um Sortierung zu bekommen
 class sortingClass:
     HOT, TRENDING, NEW, USER = "/sorting/hot.json","/sorting/trending.json","/sorting/new.json", 87
     @classmethod
-    def getBlobDataList(cls, sorting, von, bis, userId = ""):
+    def getBlobDataList(cls, sorting, von, bis, userId = "", votedPosts = {"up":[],"down":[]}):
         srt = []
         if sorting == cls.USER:
             # X Blobs werden "genommen"
@@ -190,6 +197,17 @@ class sortingClass:
             data["id"] = i
             data["OP"] = blobPost.OP
             data["OP_id"] = blobPost.OP_id
+            #wird geschaut ob der Nutzer den Blob schon upgevoted hat
+            if i in votedPosts["up"]:
+                data["isUpvoted"] = True
+                data["isDownvoted"] = False
+            elif i in votedPosts["down"]:
+                data["isDownvoted"] = True
+                data["isUpvoted"] = False
+            else:
+                data["isUpvoted"] = False
+                data["isDownvoted"] = False
+            #Post wird in List hinzgefügt
             blobList.append(data)
         # Liste wird ausgegeben
         return blobList

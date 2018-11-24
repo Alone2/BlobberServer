@@ -4,6 +4,7 @@ import cgi
 import json
 from MBlib import sortingClass
 from MBlib import blob
+from MBlib import blobUser
 
 def main():
     arguments = cgi.FieldStorage()
@@ -31,11 +32,24 @@ def main():
         sorting = sortingClass.USER
         if not "userId" in arguments:
             print("error - keine userId angegeben")
+            return
         userId = arguments["userId"]
         blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), userId.value)
         print(blobs)
+        return
     else:
         print("error - kein korrektes Sorting eingegeben")
+        return
+    #Wenn der Nutzer eingeloggt ist, wird auch zerückgegeben, ob er schon upgevotet hat
+    if "idTkn" in arguments:
+            # BloberUser wird erstellt
+            idTkn = arguments["idTkn"].value
+            blobUsr = blobUser(idTkn)
+            if blobUsr.isOk != True:
+                print("error - anmeldung schiefgelaufen")
+                return
+            blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value), "", blobUsr.getVotetPosts())
+            print(blobs)
     blobs = sortingClass.getBlobDataList(sorting, int(arguments["von"].value), int(arguments["bis"].value))
     print(blobs)
 
