@@ -63,7 +63,7 @@ class blobUser:
             userId = self.__getUniqueBlobId(userlistPath, 10)
             # User-Id wird mit Path in Index gespeichert
             index = dataClass.open(userlistPath)
-            index[userId] = {"path": self.path}
+            index[userId] = {"path": self.relativePath}
             dataClass.save(userlistPath, index)
             # Daten des Nutzers werden gespeichert
             jsonData = {}
@@ -181,7 +181,7 @@ class sortingClass:
         if sorting == cls.USER:
             # X Blobs werden "genommen"
             userPath = dataClass.open(BlobberHomeFolder + "/userlist.json")[userId]["path"]
-            dat = dataClass.open(userPath)["text"]
+            dat = dataClass.open(BlobberHomeFolder + userPath)["text"]
             for x, y in dat.items():
                 srt.append(str(x)) #Ist nicht normaler String, sondern {}
             # später ... nach time sortieren...
