@@ -46,7 +46,8 @@ class blobUser:
             self.userId = idinfo['sub']
             
             # Path wird definiert
-            self.path = BlobberHomeFolder + "/user/" + self.userId + ".json"
+            self.relativePath = "/user/" + self.userId + ".json"
+            self.path = BlobberHomeFolder + self.relativePath
         
         except ValueError:
             return False
@@ -86,7 +87,7 @@ class blobUser:
         blobId = self.__getUniqueBlobId(indexPath, 10)
         # Id wird mit Path in Index gespeichert
         index = dataClass.open(indexPath)
-        index[blobId] = {"path": self.path, "comments":[]}
+        index[blobId] = {"path": self.relativePath, "comments":[]}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
@@ -256,7 +257,7 @@ class blob:
         # Index wird geöffnet
         index = dataClass.open(self.indexPath)
         # Pfad wird abgerufen
-        self.path = index[self.postId]["path"]
+        self.path = BlobberHomeFolder + index[self.postId]["path"]
         # PostId wird ausgegeben
         blobPost =  dataClass.open(self.path)
         blobPostText = blobPost[dataVar][self.postId]
