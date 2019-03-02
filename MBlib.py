@@ -103,7 +103,7 @@ class blobUser:
         commentIndexPath = BlobberHomeFolder + "/commentIndex.json"
         commentId = self.__getUniqueBlobId(commentIndexPath, 10)
         commentIndex = dataClass.open(commentIndexPath)
-        commentIndex[commentId] = {"path": self.path}
+        commentIndex[commentId] = {"path": self.relativePath}
         dataClass.save(commentIndexPath, commentIndex)
         # Id wird in Index gespeichert
         indexPath = BlobberHomeFolder + "/index.json"
@@ -111,9 +111,9 @@ class blobUser:
         index[postId]["comments"].append(commentId)
         dataClass.save(indexPath, index)
         # Commentsnumber wird erhöht
-        blobPost = dataClass.open(index[postId]["path"])
+        blobPost = dataClass.open(BlobberHomeFolder + index[postId]["path"])
         blobPost["text"][postId]["commentsNumber"] += 1
-        dataClass.save(index[postId]["path"], blobPost)
+        dataClass.save(BlobberHomeFolder + index[postId]["path"], blobPost)
         # Blob wird gespeichert
         userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         self.writeData(["comments",commentId], userData)
