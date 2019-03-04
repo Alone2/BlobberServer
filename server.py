@@ -45,7 +45,7 @@ def newHot():
     hot = []
     # Für jeden Blob wird der Text im For-Loop ausgeführt
     for postId, postData in index.items():
-        userFile = dataClass.open(postData["path"])
+        userFile = dataClass.open(home + postData["path"])
         pstIfo = userFile["text"][postId]
 
         # upvotes (downvotes abgezogen)
@@ -68,7 +68,7 @@ def newHot():
     print(time.strftime("[%H:%M:%S]", time.localtime())+" Hot wurde generiert")
 
 if __name__ == "__main__":
-    print("Blobber-Server V0.1.1 wird gestartet...")
+    print("Blobber-Server V0.1.2 wird gestartet...")
     # Scheudle Tasks werden definiert
     schedule.every().hour.do(newTrending)
     schedule.every().hour.do(newHot)
