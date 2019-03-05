@@ -72,7 +72,7 @@ if __name__ == "__main__":
     # Scheudle Tasks werden definiert
     schedule.every().hour.do(newTrending)
     schedule.every().hour.do(newHot)
-    schedule.every(2).minutes.do(newNew)
+    schedule.every(30).seconds.do(newNew)
     print("Blobber-Server wurde gestartet")
     while True:
         # Scheudle Tasks werden am Leben gehalten/ ausgeführt
