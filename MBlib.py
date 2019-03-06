@@ -34,9 +34,9 @@ class blobUser:
         
         # Werte vom json-file werden an blobUser übertragen
         self.userFile = dataClass.open(self.path)
-        self.firstName = self.userFile["info"]["firstName"]
+        """self.firstName = self.userFile["info"]["firstName"]
         self.lastName = self.userFile["info"]["lastName"]
-        self.mail = self.userFile["info"]["mail"]
+        self.mail = self.userFile["info"]["mail"]"""
         self.username = self.userFile["info"]["username"]
 
     def __tokenReal(self, token):
@@ -67,7 +67,8 @@ class blobUser:
             dataClass.save(userlistPath, index)
             # Daten des Nutzers werden gespeichert
             jsonData = {}
-            storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"], "userId":userId,"username":"unnamed"}
+            #storedInfo = {"mail":idinfo["email"],"firstName":idinfo["given_name"],"lastName":idinfo["family_name"], "userId":userId,"username":"unnamed"}
+            storedInfo = {"userId":userId,"username":"unnamed"}
             jsonData['info'] = storedInfo
             jsonData['text'] = {}
             jsonData['comments'] = {}
@@ -151,9 +152,9 @@ class blobUser:
         myData = json.loads(jsonFile.read())
         #myData = dataClass.open(self.path)
         # Daten des Objekts werden aufgeschrieben
-        myData["info"]["firstName"] = self.firstName
+        """myData["info"]["firstName"] = self.firstName
         myData["info"]["lastName"] = self.lastName
-        myData["info"]["mail"] = self.mail 
+        myData["info"]["mail"] = self.mail """
         myData["info"]["username"] = self.username
         #dataClass.save(self.path,myData)
         # Daten werden gespeichert
