@@ -80,8 +80,6 @@ class blobUser:
 
     def write(self, text):
         # Zeit angeben
-        zeit = time.localtime()
-        zeitVar = list(zeit[0:7]) 
         unxTime = time.time()
         # random Id wird generiert
         indexPath = BlobberHomeFolder + "/index.json"
@@ -91,14 +89,12 @@ class blobUser:
         index[blobId] = {"path": self.relativePath, "comments":[]}
         dataClass.save(indexPath, index)
         # Blob wird gespeichert
-        userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
+        userData = {"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         self.writeData(["text",blobId], userData)
         #dataClass.save(self.path, userData)
 
     def comment(self, postId, text):
         # Zeit angeben
-        zeit = time.localtime()
-        zeitVar = list(zeit[0:7]) 
         unxTime = time.time()
         # comment wird in commentIndex mit einer random Id gespeichert
         commentIndexPath = BlobberHomeFolder + "/commentIndex.json"
@@ -116,7 +112,7 @@ class blobUser:
         blobPost["text"][postId]["commentsNumber"] += 1
         dataClass.save(BlobberHomeFolder + index[postId]["path"], blobPost)
         # Blob wird gespeichert
-        userData = {"time":zeitVar,"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
+        userData = {"unxTime":unxTime, "text":text, "upvotes":0, "commentsNumber":0}
         self.writeData(["comments",commentId], userData)
 
     def writeData(self, ort, data):
