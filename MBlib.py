@@ -215,6 +215,21 @@ class sortingClass:
         return blobList
     
     @classmethod
+    def getListLenght(cls, sorting, userId = ""):
+        srt = []
+        if sorting == cls.USER:
+            # X Blobs werden "genommen"
+            userPath = dataClass.open(BlobberHomeFolder + "/userlist.json")[userId]["path"]
+            dat = dataClass.open(BlobberHomeFolder + userPath)["text"]
+            for x, y in dat.items():
+                srt.append(str(x)) #Ist nicht normaler String, sondern {}
+            return len(srt)
+        else:
+            # X Blobs werden "genommen"
+            path = BlobberHomeFolder + sorting
+            return len(dataClass.open(path))
+
+    @classmethod
     def getCommentList(cls, sorting, von, bis, postId):
         index = dataClass.open(BlobberHomeFolder + "/index.json")
         # CommentId's werdenn abgerufen
