@@ -3,6 +3,7 @@ print("Content-type: text/html\n\n")
 import cgi
 import json
 from MBlib import sortingClass
+from MBlib import comment
 from MBlib import blob
 from MBlib import blobUser
 
@@ -29,7 +30,7 @@ def main():
             print(json.dumps({"lenght":l})) 
             return
         # Kommentare mit originalem Blob ausgeben
-        originlBlob = blob(arguments["comment"].value).data
+        originlBlob = sortingClass.createList([arguments["comment"].value], blob)[0]
         blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
         output = {"originalBlob":originlBlob, "comments":blobs}
         print(json.dumps(output))
