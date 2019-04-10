@@ -23,8 +23,16 @@ def main():
         if blob(arguments["comment"].value).isOk != True:
             print("error - invalid blob")
             return
+        #Wenn Länge gefragt ist -> angeben
+        if getLenght:
+            l = sortingClass.getCommentListLenght(arguments["comment"].value)
+            print(json.dumps({"lenght":l})) 
+            return
+        # Kommentare mit originalem Blob ausgeben
+        originlBlob = blob(arguments["comment"].value).data
         blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
-        print(json.dumps(blobs))
+        output = {"originalBlob":originlBlob, "comments":blobs}
+        print(json.dumps(output))
         return
     # Die blobs werden gesucht und schliesslich ausgegeben
     sorting = sortingClass()
@@ -39,7 +47,7 @@ def main():
         if not "userId" in arguments:
             print("error - keine userId angegeben")
             return
-        userId = arguments["userId"]
+        userId = arguments["userId"].value
     else:
         print("error - kein korrektes Sorting eingegeben")
         return

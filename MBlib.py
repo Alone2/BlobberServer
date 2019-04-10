@@ -187,28 +187,7 @@ class sortingClass:
             # X Blobs werden "genommen"
             path = BlobberHomeFolder + sorting
             srt = dataClass.open(path)[von:bis]
-        # Die Liste von Blobs wird kreiert
-        blobList = []
-        for i in srt:
-            blobPost = blob(i)
-            data = blobPost.data
-            data["id"] = i
-            data["OP"] = blobPost.OP
-            data["OP_id"] = blobPost.OP_id
-            #wird geschaut ob der Nutzer den Blob schon upgevoted hat
-            if i in votedPosts["up"]:
-                data["isUpvoted"] = True
-                data["isDownvoted"] = False
-            elif i in votedPosts["down"]:
-                data["isDownvoted"] = True
-                data["isUpvoted"] = False
-            else:
-                data["isUpvoted"] = False
-                data["isDownvoted"] = False
-            #Post wird in List hinzgefügt
-            blobList.append(data)
-        # Liste wird ausgegeben
-        return blobList
+        return cls.createList(srt, blob, votedPosts)
     
     @classmethod
     def getListLenght(cls, sorting, userId = ""):
@@ -226,21 +205,44 @@ class sortingClass:
             return len(dataClass.open(path))
 
     @classmethod
-    def getCommentList(cls, sorting, von, bis, postId):
+    def getCommentList(cls, sorting, von, bis, postId, votedPosts = {"up":[],"down":[]}):
         index = dataClass.open(BlobberHomeFolder + "/index.json")
-        # CommentId's werdenn abgerufen
+        # CommentId's werden abgerufen
         comments = index[postId]["comments"]
         #Liste mit Kommentaren wird generiert
-        commentsList = []
-        for com in comments:
-            commentPost = comment(com)
-            data = commentPost.data
-            data["id"] = com
-            data["OP"] = commentPost.OP
-            data["OP_id"] = commentPost.OP_id
-            commentsList.append(data)
-        return commentsList
+        return cls.createList(comments, comment, votedPosts)[von:bis]
         # Sorting noch nicht implementiert!
+
+    # getCommentListLenght noch Ohne sorting!
+    @classmethod
+    def getCommentListLenght(cls, postId):
+        index = dataClass.open(BlobberHomeFolder + "/index.json")
+        # CommentId's werden abgerufen
+        return len(index[postId]["comments"])
+    
+    @classmethod
+    def createList(cls, le_list, commentOrBlob, votedPosts = {"up":[],"down":[]}):
+        #Liste von Kommentaren / Blobs wird erstellt
+        blobList = []
+        for i in le_list:
+            blobPost = commentOrBlob(i)
+            data = blobPost.data
+            data["id"] = i
+            data["OP"] = blobPost.OP
+            data["OP_id"] = blobPost.OP_id
+            #wird geschaut ob der Nutzer den Blob schon upgevoted hat
+            if i in votedPosts["up"]:
+                data["isUpvoted"] = True
+                data["isDownvoted"] = False
+            elif i in votedPosts["down"]:
+                data["isDownvoted"] = True
+                data["isUpvoted"] = False
+            else:
+                data["isUpvoted"] = False
+                data["isDownvoted"] = False
+            #Post wird in List hinzgefügt
+            blobList.append(data)
+        return blobList
 
 # Class für Blobbers(Posts)
 class blob:
