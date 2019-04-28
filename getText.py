@@ -29,8 +29,18 @@ def main():
             l = sortingClass.getCommentListLenght(arguments["comment"].value)
             print(json.dumps({"lenght":l})) 
             return
+        # wird geschaut ob angemeldet
+        votedPosts = {"up":[],"down":[]}
+        if "idTkn" in arguments:
+            # BloberUser wird erstellt
+            idTkn = arguments["idTkn"].value
+            blobUsr = blobUser(idTkn)
+            if blobUsr.isOk != True:
+                print("error - anmeldung schiefgelaufen")
+                return
+            votedPosts = blobUsr.getVotetPosts()
         # Kommentare mit originalem Blob ausgeben
-        originlBlob = sortingClass.createList([arguments["comment"].value], blob)[0]
+        originlBlob = sortingClass.createList([arguments["comment"].value], blob, votedPosts)[0]
         blobs = sortingClass.getCommentList("", int(arguments["von"].value), int(arguments["bis"].value), arguments["comment"].value)
         output = {"originalBlob":originlBlob, "comments":blobs}
         print(json.dumps(output))
