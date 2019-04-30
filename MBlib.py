@@ -178,7 +178,7 @@ class sortingClass:
         if sorting == cls.USER:
             # X Blobs werden "genommen"
             userPath = dataClass.open(BlobberHomeFolder + "/userlist.json")[userId]["path"]
-            dat = dataClass.open(BlobberHomeFolder + userPath)["text"]
+            dat = dataClass.open(BlobberHomeFolder + userPath)["text"]  # ERROR! -> manche blobs sind unter "text" noch da, aber im Index gelöscht
             for x, y in dat.items():
                 srt.append(str(x)) #Ist nicht normaler String, sondern {}
             # später ... nach time sortieren...
@@ -226,6 +226,17 @@ class sortingClass:
         blobList = []
         for i in le_list:
             blobPost = commentOrBlob(i)
+            # Wenn Blob nicht existiert: error
+            if not blobPost.isOk:
+                data = {}
+                data["id"] = i
+                data["text"] = "[error]"
+                data["OP"] = "[removed]"
+                data["OP_id"] = ""
+                data["id"] = ""
+                data["unxTime"] = time.time()
+                blobList.append(data)
+                continue
             data = blobPost.data
             data["id"] = i
             data["OP"] = blobPost.OP
